@@ -1,6 +1,7 @@
 import { HttpException, Injectable, Logger } from '@nestjs/common';
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import * as dotenv from 'dotenv';
+import { UpdateCampaignDto } from './dto/update-campaign.dto';
 
 dotenv.config();
 
@@ -79,7 +80,7 @@ export class FacebookService {
     }
   }
 
-  async updateCampaign(id: string, data: Record<string, unknown>) {
+  async updateCampaign(id: string, data: UpdateCampaignDto) {
     const url = `${this.baseUrl}/${id}`;
     this.logger.log(`Updating campaign ${id}`);
     try {
