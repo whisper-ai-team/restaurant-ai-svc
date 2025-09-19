@@ -1,16 +1,39 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { ApiProperty } from '@nestjs/swagger';
+import { IsEnum, IsOptional, IsString, IsArray } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+
+export enum CampaignStatus {
+  ACTIVE = 'ACTIVE',
+  PAUSED = 'PAUSED',
+}
+
+export enum BuyingType {
+  AUCTION = 'AUCTION',
+  RESERVED = 'RESERVED',
+}
 
 export class CreateCampaignDto {
   @ApiProperty()
-  name: string;
+  @IsString()
+  name!: string;
 
-  @ApiProperty({ required: false })
-  objective?: string;
+  @ApiPropertyOptional({ enum: CampaignStatus, default: CampaignStatus.PAUSED })
+  @IsEnum(CampaignStatus)
+  @IsOptional()
+  status?: CampaignStatus;
 
-  @ApiProperty({ required: false })
-  status?: string;
+  @ApiPropertyOptional()
+  @IsString()
+  @IsOptional()
+  objective?: string; // e.g., LINK_CLICKS, CONVERSIONS, etc.
 
-  @ApiProperty({ required: false, type: [String] })
+  @ApiPropertyOptional({ type: [String], default: [] })
+  @IsArray()
+  @IsOptional()
   special_ad_categories?: string[];
+
+  @ApiPropertyOptional({ enum: BuyingType, default: BuyingType.AUCTION })
+  @IsEnum(BuyingType)
+  @IsOptional()
+  buying_type?: BuyingType;
 }
