@@ -8,9 +8,31 @@ dotenv.config();
 @Injectable()
 export class FacebookService {
   private readonly logger = new Logger(FacebookService.name);
-  private readonly accessToken = process.env.META_ACCESS_TOKEN;
-  private readonly adAccountId = process.env.META_AD_ACCOUNT_ID;
-  private readonly apiVersion = process.env.META_API_VERSION;
+  private readonly accessToken: string;
+  private readonly adAccountId: string;
+  private readonly apiVersion: string;
+
+  constructor() {
+    this.accessToken = this.requireEnv('META_ACCESS_TOKEN');
+    this.apiVersion = this.requireEnv('META_API_VERSION');
+
+    const rawAdAccountId = this.requireEnv('META_AD_ACCOUNT_ID');
+    this.adAccountId = rawAdAccountId.startsWith('act_')
+      ? rawAdAccountId
+      : `act_${rawAdAccountId}`;
+  }
+
+  private requireEnv(
+    name: 'META_ACCESS_TOKEN' | 'META_API_VERSION' | 'META_AD_ACCOUNT_ID',
+  ) {
+    const value = process.env[name];
+    if (!value) {
+      const message = `${name} environment variable is required for FacebookService.`;
+      this.logger.error(message);
+      throw new Error(message);
+    }
+    return value;
+  }
 
   private get baseUrl() {
     return `https://graph.facebook.com/${this.apiVersion}`;
