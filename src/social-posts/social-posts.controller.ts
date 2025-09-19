@@ -4,7 +4,8 @@ import { RecordEngagementDto } from './dto/record-engagement.dto';
 import { SchedulePostDto } from './dto/schedule-post.dto';
 import { UploadMediaDto } from './dto/upload-media.dto';
 import { WriteDescriptionDto } from './dto/write-description.dto';
-import { FlowResponse, SocialPostsService } from './social-posts.service';
+import { SocialPostsService } from './social-posts.service';
+import type { FlowResponse } from './social-posts.service';
 
 @Controller('social-posts')
 export class SocialPostsController {
