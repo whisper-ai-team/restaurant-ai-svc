@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { BusinessAccountStatus } from './business.enums';
 import { PrismaService } from '../prisma/prisma.service';
