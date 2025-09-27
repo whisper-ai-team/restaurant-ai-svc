@@ -106,19 +106,43 @@ export class BusinessService {
       systemUserToken,
       tokenType: tokenType ?? 'SYSTEM_USER',
       grantedScopes: grantedScopes ?? [],
-      ...(expiresAtValue !== undefined ? { expiresAt: expiresAtValue } : {}),
-      ...(connectedAssetsValue !== undefined ? { connectedAssets: connectedAssetsValue } : {}),
-      ...(typeof metaBusinessId !== 'undefined' ? { metaBusinessId } : {}),
     };
+
+    if (expiresAtValue !== undefined) {
+      createData.expiresAt = expiresAtValue;
+    }
+
+    if (connectedAssetsValue !== undefined) {
+      createData.connectedAssets = connectedAssetsValue;
+    }
+
+    if (typeof metaBusinessId !== 'undefined') {
+      createData.metaBusinessId = metaBusinessId;
+    }
 
     const updateData = {
       systemUserToken,
-      ...(typeof tokenType !== 'undefined' ? { tokenType } : {}),
-      ...(expiresAtValue !== undefined ? { expiresAt: expiresAtValue } : {}),
-      ...(typeof grantedScopes !== 'undefined' ? { grantedScopes } : {}),
-      ...(connectedAssetsValue !== undefined ? { connectedAssets: connectedAssetsValue } : {}),
-      ...(typeof metaBusinessId !== 'undefined' ? { metaBusinessId } : {}),
     };
+
+    if (typeof tokenType !== 'undefined') {
+      updateData.tokenType = tokenType;
+    }
+
+    if (expiresAtValue !== undefined) {
+      updateData.expiresAt = expiresAtValue;
+    }
+
+    if (typeof grantedScopes !== 'undefined') {
+      updateData.grantedScopes = grantedScopes;
+    }
+
+    if (connectedAssetsValue !== undefined) {
+      updateData.connectedAssets = connectedAssetsValue;
+    }
+
+    if (typeof metaBusinessId !== 'undefined') {
+      updateData.metaBusinessId = metaBusinessId;
+    }
 
     const [credential] = await this.prisma.$transaction([
       this.prisma.businessCredential.upsert({
