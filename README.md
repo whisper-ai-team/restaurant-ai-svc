@@ -31,6 +31,16 @@
 $ pnpm install
 ```
 
+### Environment configuration
+
+Copy the example environment file and update the variables with your own secrets. Prisma reads the `DATABASE_URL` variable to
+connect to your PostgreSQL instance.
+
+```bash
+$ cp .env.example .env
+# then edit .env to provide your database credentials
+```
+
 ## Authentication
 
 The API is protected by Clerk-issued JSON Web Tokens (JWTs). To enable JWT verification, configure the following environment variables:
