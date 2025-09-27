@@ -95,22 +95,60 @@ export class BusinessService {
   async upsertCredential(businessAccountId: string, dto: UpsertBusinessCredentialDto) {
     await this.ensureAccount(businessAccountId);
 
-    const { expiresAt, connectedAssets, grantedScopes, systemUserToken, ...rest } = dto;
-    const data: Record<string, unknown> = {
-      ...rest,
-      ...(typeof grantedScopes !== 'undefined' ? { grantedScopes } : {}),
-      ...(typeof connectedAssets !== 'undefined'
-        ? { connectedAssets: connectedAssets as Prisma.JsonValue }
-        : {}),
-      ...(expiresAt ? { expiresAt: new Date(expiresAt) } : { expiresAt: null }),
+    const { expiresAt, connectedAssets, grantedScopes, systemUserToken, tokenType, metaBusinessId } = dto;
+
+    const expiresAtValue =
+      typeof expiresAt !== 'undefined' ? (expiresAt ? new Date(expiresAt) : null) : undefined;
+    const connectedAssetsValue = this.normalizeJson(connectedAssets);
+
+    const createData: Prisma.BusinessCredentialUncheckedCreateInput = {
+      businessAccountId,
+      systemUserToken,
+      tokenType: tokenType ?? 'SYSTEM_USER',
+      grantedScopes: grantedScopes ?? [],
+    };
+
+    if (expiresAtValue !== undefined) {
+      createData.expiresAt = expiresAtValue;
+    }
+
+    if (connectedAssetsValue !== undefined) {
+      createData.connectedAssets = connectedAssetsValue;
+    }
+
+    if (typeof metaBusinessId !== 'undefined') {
+      createData.metaBusinessId = metaBusinessId;
+    }
+
+    const updateData: Prisma.BusinessCredentialUncheckedUpdateInput = {
       systemUserToken,
     };
+
+    if (typeof tokenType !== 'undefined') {
+      updateData.tokenType = tokenType;
+    }
+
+    if (expiresAtValue !== undefined) {
+      updateData.expiresAt = expiresAtValue;
+    }
+
+    if (typeof grantedScopes !== 'undefined') {
+      updateData.grantedScopes = grantedScopes;
+    }
+
+    if (connectedAssetsValue !== undefined) {
+      updateData.connectedAssets = connectedAssetsValue;
+    }
+
+    if (typeof metaBusinessId !== 'undefined') {
+      updateData.metaBusinessId = metaBusinessId;
+    }
 
     const [credential] = await this.prisma.$transaction([
       this.prisma.businessCredential.upsert({
         where: { businessAccountId },
-        update: data,
-        create: { businessAccountId, ...data },
+        update: updateData,
+        create: createData,
       }),
       this.prisma.businessAccount.update({
         where: { id: businessAccountId },
@@ -129,14 +167,15 @@ export class BusinessService {
   async addSocialReview(businessAccountId: string, dto: CreateBusinessSocialReviewDto) {
     await this.ensureAccount(businessAccountId);
     const { postedAt, metadata, ...rest } = dto;
+    const postedAtValue =
+      typeof postedAt !== 'undefined' ? (postedAt ? new Date(postedAt) : null) : undefined;
+    const metadataValue = this.normalizeJson(metadata);
     return this.prisma.businessSocialReview.create({
       data: {
         ...rest,
         businessAccountId,
-        ...(postedAt ? { postedAt: new Date(postedAt) } : {}),
-        ...(typeof metadata !== 'undefined'
-          ? { metadata: metadata as Prisma.JsonValue }
-          : {}),
+        ...(postedAtValue !== undefined ? { postedAt: postedAtValue } : {}),
+        ...(metadataValue !== undefined ? { metadata: metadataValue } : {}),
       },
     });
   }
@@ -148,14 +187,15 @@ export class BusinessService {
   ) {
     await this.ensureSocialReview(businessAccountId, reviewId);
     const { postedAt, metadata, ...rest } = dto;
+    const postedAtValue =
+      typeof postedAt !== 'undefined' ? (postedAt ? new Date(postedAt) : null) : undefined;
+    const metadataValue = this.normalizeJson(metadata);
     return this.prisma.businessSocialReview.update({
       where: { id: reviewId },
       data: {
         ...rest,
-        ...(postedAt ? { postedAt: new Date(postedAt) } : {}),
-        ...(typeof metadata !== 'undefined'
-          ? { metadata: metadata as Prisma.JsonValue }
-          : {}),
+        ...(postedAtValue !== undefined ? { postedAt: postedAtValue } : {}),
+        ...(metadataValue !== undefined ? { metadata: metadataValue } : {}),
       },
     });
   }
@@ -195,5 +235,17 @@ export class BusinessService {
         `Social review ${reviewId} not found for account ${businessAccountId}`,
       );
     }
+  }
+
+  private normalizeJson(
+    value: unknown,
+  ): Prisma.InputJsonValue | Prisma.JsonNull | undefined {
+    if (typeof value === 'undefined') {
+      return undefined;
+    }
+    if (value === null) {
+      return Prisma.JsonNull;
+    }
+    return value as Prisma.InputJsonValue;
   }
 }
