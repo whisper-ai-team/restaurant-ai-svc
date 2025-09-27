@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { BusinessAccountStatus, Prisma } from '@prisma/client';
+import { Prisma } from '@prisma/client';
+import { BusinessAccountStatus } from './business.enums';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateBusinessAccountDto } from './dto/create-business-account.dto';
 import { UpdateBusinessAccountDto } from './dto/update-business-account.dto';

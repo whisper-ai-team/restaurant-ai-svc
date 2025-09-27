@@ -1,5 +1,5 @@
 import { IsEnum, IsOptional, IsString, IsUrl } from 'class-validator';
-import { BusinessAccountStatus } from '@prisma/client';
+import { BusinessAccountStatus } from '../business.enums';
 
 export class UpdateBusinessAccountDto {
   @IsOptional()

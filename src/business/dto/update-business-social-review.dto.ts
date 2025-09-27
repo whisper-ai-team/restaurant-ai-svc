@@ -1,5 +1,5 @@
 import { IsDateString, IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
-import { ReviewSentiment, SocialPlatform } from '@prisma/client';
+import { ReviewSentiment, SocialPlatform } from '../business.enums';
 
 export class UpdateBusinessSocialReviewDto {
   @IsOptional()
