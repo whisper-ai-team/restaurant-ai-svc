@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
 import { BusinessAccountStatus } from './business.enums';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateBusinessAccountDto } from './dto/create-business-account.dto';
@@ -102,7 +101,7 @@ export class BusinessService {
       typeof expiresAt !== 'undefined' ? (expiresAt ? new Date(expiresAt) : null) : undefined;
     const connectedAssetsValue = this.normalizeJson(connectedAssets);
 
-    const createData: Prisma.BusinessCredentialUncheckedCreateInput = {
+    const createData = {
       businessAccountId,
       systemUserToken,
       tokenType: tokenType ?? 'SYSTEM_USER',
@@ -121,7 +120,7 @@ export class BusinessService {
       createData.metaBusinessId = metaBusinessId;
     }
 
-    const updateData: Prisma.BusinessCredentialUncheckedUpdateInput = {
+    const updateData = {
       systemUserToken,
     };
 
@@ -238,15 +237,13 @@ export class BusinessService {
     }
   }
 
-  private normalizeJson(
-    value: unknown,
-  ): Prisma.InputJsonValue | Prisma.NullableJsonNullValueInput | undefined {
+  private normalizeJson(value: unknown): unknown {
     if (typeof value === 'undefined') {
       return undefined;
     }
     if (value === null) {
-      return Prisma.JsonNull;
+      return null;
     }
-    return value as Prisma.InputJsonValue;
+    return value;
   }
 }
