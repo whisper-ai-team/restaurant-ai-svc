@@ -8,7 +8,7 @@ import { FacebookController } from './facebook/facebook.controller';
 import { FacebookService } from './facebook/facebook.service';
 import { SocialPostsController } from './social-posts/social-posts.controller';
 import { SocialPostsService } from './social-posts/social-posts.service';
-import { ApiTokenGuard } from './security/api-token.guard';
+import { ClerkJwtGuard } from './security/clerk-jwt.guard';
 
 @Module({
   controllers: [
@@ -24,7 +24,7 @@ import { ApiTokenGuard } from './security/api-token.guard';
     CompetitorsService,
     {
       provide: APP_GUARD,
-      useClass: ApiTokenGuard,
+      useClass: ClerkJwtGuard,
     },
   ],
 })
