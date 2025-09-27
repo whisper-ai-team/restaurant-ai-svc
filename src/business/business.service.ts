@@ -239,7 +239,7 @@ export class BusinessService {
 
   private normalizeJson(
     value: unknown,
-  ): Prisma.InputJsonValue | Prisma.JsonNull | undefined {
+  ): Prisma.InputJsonValue | Prisma.NullableJsonNullValueInput | undefined {
     if (typeof value === 'undefined') {
       return undefined;
     }
