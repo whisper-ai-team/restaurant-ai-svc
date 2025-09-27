@@ -31,6 +31,18 @@
 $ pnpm install
 ```
 
+## Authentication
+
+The API is protected by Clerk-issued JSON Web Tokens (JWTs). To enable JWT verification, configure the following environment variables:
+
+- `CLERK_JWT_AUTH_ENABLED=true` – enables the guard. When `false`, security is disabled (useful for local development).
+- `CLERK_JWKS_URL` – the Clerk JWKS endpoint (for example, `https://<your-domain>.clerk.accounts.dev/.well-known/jwks.json`).
+- `CLERK_ISSUER` – the expected token issuer.
+- `CLERK_AUDIENCE` – the expected token audience (optional).
+- `CLERK_JWKS_CACHE_TTL` – optional TTL, in milliseconds, for JWKS caching (defaults to five minutes).
+
+Incoming requests must include an `Authorization: Bearer <token>` header containing a valid Clerk token. Requests without a valid token are rejected with `401 Unauthorized`.
+
 ## Compile and run the project
 
 ```bash
