@@ -1,0 +1,65 @@
+// Shared enums live in the "common" PostgreSQL schema.
+// You can reference them from models in any other schema.
+
+enum BusinessStatus {
+  PENDING
+  CONNECTED
+  DISCONNECTED
+
+  @@schema("common")
+}
+
+enum SocialPlatform {
+  FACEBOOK
+  INSTAGRAM
+  WHATSAPP
+  GOOGLE
+  YELP
+  OTHER
+
+  @@schema("common")
+}
+
+enum ReviewSentiment {
+  POSITIVE
+  NEUTRAL
+  NEGATIVE
+
+  @@schema("common")
+}
+
+enum EventStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELED
+
+  @@schema("common")
+}
+
+enum EventSource {
+  SYSTEM
+  MANUAL
+  INTEGRATION
+
+  @@schema("common")
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+  FAILED
+
+  @@schema("common")
+}
+
+enum CampaignObjective {
+  AWARENESS
+  TRAFFIC
+  LEADS
+  SALES
+
+  @@schema("common")
+}

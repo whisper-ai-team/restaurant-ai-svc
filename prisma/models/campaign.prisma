@@ -1,0 +1,24 @@
+model Campaign {
+
+  id          String            @id @default(uuid())
+  businessId  String
+  name        String
+  platform    SocialPlatform
+  objective   CampaignObjective
+  status      CampaignStatus    @default(DRAFT)
+  budgetCents Int?
+  currency    String?
+  startAt     DateTime?
+  endAt       DateTime?
+  metadata    Json?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  // 🔹 Named relation pointing back to Business
+  business Business @relation("BusinessCampaigns", fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@index([businessId])
+  @@index([platform, status])
+  @@index([startAt])
+  @@schema("campaign")
+}

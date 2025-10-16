@@ -1,0 +1,21 @@
+model Event {
+
+  id          String      @id @default(uuid())
+  businessId  String
+  title       String
+  description String?
+  status      EventStatus @default(PLANNED)
+  source      EventSource @default(MANUAL)
+  startAt     DateTime
+  endAt       DateTime?
+  metadata    Json?
+  createdById String?
+
+  // Name the relations explicitly
+  business  Business @relation("BusinessEvents", fields: [businessId], references: [id], onDelete: Cascade)
+  createdBy User?    @relation("UserCreatedEvents", fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([businessId, startAt])
+  @@index([status])
+  @@schema("events")
+}

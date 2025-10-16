@@ -1,0 +1,20 @@
+model DailyBusinessMetric {
+
+  id           String          @id @default(cuid())
+  businessId   String
+  date         DateTime
+  platform     SocialPlatform?
+  impressions  Int             @default(0)
+  clicks       Int             @default(0)
+  spendCents   Int             @default(0)
+  leads        Int             @default(0)
+  conversions  Int             @default(0)
+  revenueCents Int             @default(0)
+  metadata     Json?
+
+  business Business @relation("BusinessMetrics", fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@unique([businessId, date, platform])
+  @@index([date])
+  @@schema("reporting")
+}

@@ -1,0 +1,67 @@
+model User {
+
+  id                   String    @id @default(cuid())
+  name                 String?
+  email                String?   @unique
+  hashedPassword       String?
+  emailVerified        DateTime?
+  image                String?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  stripeCustomerId     String?   @unique
+  tokens               Int?
+  paypalTransactionId  String?
+  isDisclaimerAccpeted Boolean   @default(false)
+
+  subscription UserSubscription?
+  featureFlags UserFeatureFlag[]
+
+  // back-relation for Event.createdBy
+  createdEvents Event[] @relation("UserCreatedEvents")
+
+  @@index([email])
+  @@schema("user")
+}
+
+model UserSubscription {
+
+  id                     String    @id @default(cuid())
+  userId                 String    @unique
+  stripeCustomerId       String?
+  stripeSubscriptionId   String?
+  stripePriceId          String?
+  stripeCurrentPeriodEnd DateTime?
+  aiLiveMinutesLeft      Float     @default(0)
+  aiMockMinutesLeft      Float     @default(0)
+  aiLiveMinutes          Float     @default(0)
+  aiMockMinutes          Float     @default(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@schema("user")
+}
+
+model FeatureFlag {
+
+  id        String            @id @default(cuid())
+  name      String
+  isEnabled Boolean           @default(true)
+  users     UserFeatureFlag[]
+
+  @@unique([name])
+  @@schema("user")
+}
+
+model UserFeatureFlag {
+
+  userId        String
+  featureFlagId String
+  isEnabled     Boolean @default(false)
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  featureFlag FeatureFlag @relation(fields: [featureFlagId], references: [id], onDelete: Cascade)
+
+  @@id([userId, featureFlagId])
+  @@index([featureFlagId])
+  @@schema("user")
+}
