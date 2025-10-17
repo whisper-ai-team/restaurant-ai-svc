@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { CreateSocialPostDto } from './dto/create-social-post.dto';
 import { RecordEngagementDto } from './dto/record-engagement.dto';
 import { SchedulePostDto } from './dto/schedule-post.dto';
@@ -7,6 +8,7 @@ import { WriteDescriptionDto } from './dto/write-description.dto';
 import { SocialPostsService } from './social-posts.service';
 import type { FlowResponse } from './social-posts.service';
 
+@ApiTags('social-posts')
 @Controller('social-posts')
 export class SocialPostsController {
   constructor(private readonly socialPostsService: SocialPostsService) {}
