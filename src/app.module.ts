@@ -10,10 +10,11 @@ import { FacebookService } from './facebook/facebook.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { SocialPostsController } from './social-posts/social-posts.controller';
 import { SocialPostsService } from './social-posts/social-posts.service';
+import { UserModule } from './user/user.module';
 import { ClerkJwtGuard } from './security/clerk-jwt.guard';
 
 @Module({
-  imports: [PrismaModule, BusinessModule],
+  imports: [PrismaModule, BusinessModule, UserModule],
   controllers: [
     FacebookController,
     SocialPostsController,
