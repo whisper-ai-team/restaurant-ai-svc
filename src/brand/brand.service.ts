@@ -6,10 +6,11 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import axios, { AxiosError } from 'axios';
+import { parseBrandfetch, type ParsedBrand } from './brandfetch.parser';
 
 @Injectable()
 export class BrandService {
-  async getBrandInfo(domain: string) {
+  async getBrandInfo(domain: string): Promise<ParsedBrand> {
     const apiKey = process.env.BRANDFETCH_API_KEY;
     if (!apiKey) {
       throw new InternalServerErrorException('Brandfetch API key is not configured');
@@ -25,7 +26,7 @@ export class BrandService {
         },
       );
 
-      return response.data;
+      return parseBrandfetch(response.data);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         this.handleAxiosError(error);

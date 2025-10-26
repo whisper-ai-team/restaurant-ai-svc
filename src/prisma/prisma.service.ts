@@ -11,6 +11,10 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   declare businessCompetitor: any;
   declare businessCredential: any;
   declare businessSocialReview: any;
+  declare user: any;
+  declare userSubscription: any;
+  declare featureFlag: any;
+  declare userFeatureFlag: any;
 
   async onModuleInit() {
     await this.$connect();

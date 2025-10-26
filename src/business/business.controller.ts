@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Put } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { BusinessService } from './business.service';
 import { CreateBusinessAccountDto } from './dto/create-business-account.dto';
 import { UpdateBusinessAccountDto } from './dto/update-business-account.dto';
@@ -9,6 +10,7 @@ import { UpsertBusinessCredentialDto } from './dto/upsert-business-credential.dt
 import { CreateBusinessSocialReviewDto } from './dto/create-business-social-review.dto';
 import { UpdateBusinessSocialReviewDto } from './dto/update-business-social-review.dto';
 
+@ApiTags('business-accounts')
 @Controller('business-accounts')
 export class BusinessController {
   constructor(private readonly businessService: BusinessService) {}

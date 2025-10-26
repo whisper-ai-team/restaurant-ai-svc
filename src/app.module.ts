@@ -8,22 +8,27 @@ import { CompetitorsService } from './competitors/competitors.service';
 import { FacebookController } from './facebook/facebook.controller';
 import { FacebookService } from './facebook/facebook.service';
 import { PrismaModule } from './prisma/prisma.module';
+import { PlacesController } from './places/places.controller';
+import { PlacesService } from './places/places.service';
 import { SocialPostsController } from './social-posts/social-posts.controller';
 import { SocialPostsService } from './social-posts/social-posts.service';
+import { UserModule } from './user/user.module';
 import { ClerkJwtGuard } from './security/clerk-jwt.guard';
 
 @Module({
-  imports: [PrismaModule, BusinessModule],
+  imports: [PrismaModule, BusinessModule, UserModule],
   controllers: [
     FacebookController,
     SocialPostsController,
     BrandController,
+    PlacesController,
     CompetitorsController,
   ],
   providers: [
     FacebookService,
     SocialPostsService,
     BrandService,
+    PlacesService,
     CompetitorsService,
     {
       provide: APP_GUARD,
